@@ -25,7 +25,8 @@ const Coin = styled.li`
   a {
     padding: 20px;
     transition: color 0.3s ease-in-out;
-    display: block;
+    display: flex;
+    align-items: center;
   }
 
   &:hover {
@@ -55,6 +56,12 @@ interface ICoins {
   type: string;
 }
 
+const Img = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+`;
+
 const Coins = () => {
   const [coins, setCoins] = useState<ICoins[]>([]);
   const [loading, setLoading] = useState(true);
@@ -80,7 +87,13 @@ const Coins = () => {
         <CoinList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link to={`/${coin.id}`} state={{ name: coin.name }}>
+                {" "}
+                <Img
+                  src={`https://static.coinpaprika.com/coin/${coin.id}/logo.png`}
+                />
+                {coin.name} &rarr;
+              </Link>
             </Coin>
           ))}
         </CoinList>
