@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -41,6 +42,27 @@ function Coin() {
 
   console.clear();
   console.log(location);
+
+  useEffect(() => {
+    (async () => {
+      const priceData = await axios.get(
+        `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
+      );
+      console.log(priceData.data);
+
+      const infoData = await axios.get(
+        `https://api.coinpaprika.com/v1/coins/${coinId}`
+      );
+      console.log(infoData.data);
+
+      setInfo(infoData);
+      setPriceInfo(priceData);
+    })();
+  }, []);
+
+  const [info, setInfo] = useState({});
+  const [priceInfo, setPriceInfo] = useState({});
+
   return (
     <Container>
       <Header>
