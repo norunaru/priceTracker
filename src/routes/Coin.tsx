@@ -33,14 +33,47 @@ interface RouteState {
   name: string;
 }
 
+interface InfoData {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+  logo: string;
+  description: string;
+  message: string;
+  open_source: boolean;
+  started_at: string;
+  development_status: string;
+  hardware_wallet: boolean;
+  proof_type: string;
+  org_structure: string;
+  hash_algorithm: string;
+  first_data_at: string;
+  last_data_at: string;
+}
+
+interface PriceData {
+  time_open: number;
+  time_close: number;
+  open: string;
+  high: string;
+  low: string;
+  close: string;
+  volume: string;
+  market_cap: number;
+}
+
 function Coin() {
   const [loading, setLoading] = useState(true);
   const { coinId } = useParams();
   const location = useLocation();
-
+  const [info, setInfo] = useState<InfoData>();
+  const [priceInfo, setPriceInfo] = useState<PriceData>();
   const state = location.state as RouteState;
 
-  console.clear();
   console.log(location);
 
   useEffect(() => {
@@ -55,13 +88,10 @@ function Coin() {
       );
       console.log(infoData.data);
 
-      setInfo(infoData);
-      setPriceInfo(priceData);
+      setInfo(infoData.data);
+      setPriceInfo(priceData.data);
     })();
   }, []);
-
-  const [info, setInfo] = useState({});
-  const [priceInfo, setPriceInfo] = useState({});
 
   return (
     <Container>
@@ -69,7 +99,7 @@ function Coin() {
         <Title>{state?.name || "loading"}</Title>
       </Header>
 
-      {loading ? <Loader>"loading..."</Loader> : null}
+      {loading ? <Loader>"loading..."</Loader> : priceInfo?.close}
     </Container>
   );
 }
